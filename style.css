@@ -1,0 +1,23 @@
+.one {
+    width: 50px;
+    height: 50px;
+    background-color: yellow;
+}
+
+.two {
+    width: 50px;
+    height: 50px;
+    background-color: blue;
+}
+
+.three {
+    width: 50px;
+    height: 50px;
+    background-color: green;
+}
+
+.operator-btn {
+    width: 50px;
+    height: 50px;
+    background-color: purple;
+}
