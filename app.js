@@ -1,11 +1,15 @@
 //operator functions
 const addCalc = (num1, num2) => {
-    let result = num1 + num2;
+    let result = parseFloat(num1) + parseFloat(num2);
     let resultRounded = roundToTwo(result);
     console.log(resultRounded);
     return resultRounded;}
 
-const multiplyCalc = (num1, num2) => num1 * num2;
+const multiplyCalc = (num1, num2) => {
+    let result = parseFloat(num1) * parseFloat(num2);
+    let resultRounded = roundToTwo(result);
+    console.log(resultRounded);
+    return resultRounded;}
 
 let operator = undefined;
 
@@ -31,11 +35,6 @@ function roundToTwo(num) {
 //user input
 operatorSelection.forEach((button) => {
     button.addEventListener('click', (e)=> {
-        //if operation key is pushed before any value for num one and two, operator needs to stay undefined
-        // if (memory.num1 == undefined && memory.num2 == undefined) {
-        //     console.log('there are zero numbers')
-        // }
-        //need to do first calculation, then set operator
         if (operator !== undefined && memory.num2 !== undefined) {
             operate(memory.num1, memory.num2, operator);
             console.log('run');
@@ -96,13 +95,13 @@ numberSelection.forEach((button) => {
 let operate = function operation (num1, num2, operator){
 
     if (operator == "add") {
-        memory.runningSum = addCalc(parseFloat(memory.num1), parseFloat(memory.num2, operator));
+        memory.runningSum = addCalc(memory.num1, memory.num2, operator);
         memory.num1 = memory.runningSum;
         memory.num2 = undefined;
         console.log(memory);
     }
-    else if (operator === "multiply") {
-        memory.runningSum = multiplyCalc(parseFloat(memory.num1), parseFloat(memory.num2, operator));
+    else if (operator == "multiply") {
+        memory.runningSum = multiplyCalc(memory.num1, memory.num2, operator);
         memory.num1 = memory.runningSum;
         memory.num2 = undefined;
         console.log(memory);
@@ -116,13 +115,12 @@ equalsSelection.addEventListener('click', function (){
     if (memory.num1 == undefined || memory.num2 == undefined) {
         memory.num1 = memory.num1;
         console.log(" you have not given me two numbers")
-        //console.log(memory);
     } 
     //pressing equals when two numbers present, but no running sum
     else if (memory.runningSum == undefined) {
         console.log('no running sum');
         console.log(memory);
-        memory.sum = operate(parseFloat(memory.num1), parseFloat(memory.num2), operator);
+        memory.sum = operate(memory.num1, memory.num2, operator);
         memory.num2 = undefined;
         console.log(memory);
         
@@ -130,7 +128,7 @@ equalsSelection.addEventListener('click', function (){
     else if (memory.runningSum !==undefined) {
         console.log("there is a running sum. add num 1 and 2")
         console.log(memory);
-        memory.sum = operate(parseFloat(memory.num1), parseFloat(memory.num2), operator);
+        memory.sum = operate(memory.num1, memory.num2, operator);
         console.log(memory);
         memory.sum = undefined;
         memory.num2 = undefined;
