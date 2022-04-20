@@ -11,8 +11,6 @@ let operator = undefined;
 
 let memory = {num1: undefined, num2: undefined, sum: undefined, runningSum: undefined}
 
-let test;//remove this var on next commit
-
 let numberSelection = document.querySelectorAll('.num-btn');
 
 let operatorSelection = document.querySelectorAll('.operator-btn');
@@ -33,13 +31,24 @@ function roundToTwo(num) {
 //user input
 operatorSelection.forEach((button) => {
     button.addEventListener('click', (e)=> {
+        //if operation key is pushed before any value for num one and two, operator needs to stay undefined
+        // if (memory.num1 == undefined && memory.num2 == undefined) {
+        //     console.log('there are zero numbers')
+        // }
         //need to do first calculation, then set operator
         if (operator !== undefined && memory.num2 !== undefined) {
             operate(memory.num1, memory.num2, operator);
+            console.log('run');
         }
-        operator = e.target.id;
-        console.log("new operator: " + operator);
+
+        if (memory.num1 !==undefined){
+            operator = e.target.id;
+            console.log("new operator: " + operator);
+        }
+        
+
         if (memory.num2 == undefined) {
+            //operator = undefined;
             console.log('need two sums');
         } 
         else if (memory.num1 !== undefined && memory.num2 !== undefined) {
@@ -52,12 +61,10 @@ operatorSelection.forEach((button) => {
 });
 
 
-
 numberSelection.forEach((button) => {
     button.addEventListener('click', (e)=> {
         console.log("operator :" + operator)
         if (memory.num1 == undefined && operator == undefined) {  
-
             memory.num1 = e.target.innerText;
             console.log("memory.num1: " + memory.num1);
             console.log(memory);
@@ -67,7 +74,9 @@ numberSelection.forEach((button) => {
             console.log(memory.num1);
             console.log(memory);
         }
+        // need new metric for 
 
+        //(operator !== undefined && !calculationComplete)
         if (operator !== undefined && !calculationComplete) {
             if (memory.num2 == undefined) {
                 console.log("num2 first function")
