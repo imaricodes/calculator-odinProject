@@ -2,7 +2,6 @@
 const addCalc = (num1, num2) => {
     let result = parseFloat(num1) + parseFloat(num2);
     let resultRounded = roundToTwo(result);
-    console.log(resultRounded);
     return resultRounded;}
 
 const multiplyCalc = (num1, num2) => {
@@ -13,6 +12,7 @@ const multiplyCalc = (num1, num2) => {
 
 let operator = undefined;
 
+//sum key/value might not be needed
 let memory = {num1: undefined, num2: undefined, sum: undefined, runningSum: undefined}
 
 let numberSelection = document.querySelectorAll('.num-btn');
@@ -28,6 +28,8 @@ let calculationComplete = false;
 
 clearBtn.addEventListener('click', clearCalculator);
 
+let display = document.querySelector('.display');
+
 function roundToTwo(num) {
     return +(Math.round(num + "e+2")  + "e-2");
 }
@@ -37,6 +39,7 @@ operatorSelection.forEach((button) => {
     button.addEventListener('click', (e)=> {
         if (operator !== undefined && memory.num2 !== undefined) {
             operate(memory.num1, memory.num2, operator);
+            display.innerText = memory.runningSum.toString();
             console.log('run');
         }
 
@@ -44,7 +47,6 @@ operatorSelection.forEach((button) => {
             operator = e.target.id;
             console.log("new operator: " + operator);
         }
-        
 
         if (memory.num2 == undefined) {
             //operator = undefined;
@@ -59,32 +61,34 @@ operatorSelection.forEach((button) => {
     })
 });
 
-
 numberSelection.forEach((button) => {
     button.addEventListener('click', (e)=> {
         console.log("operator :" + operator)
         if (memory.num1 == undefined && operator == undefined) {  
             memory.num1 = e.target.innerText;
             console.log("memory.num1: " + memory.num1);
+            display.innerText = memory.num1.toString();
             console.log(memory);
         }
         else if (operator == undefined){
             memory.num1 += e.target.innerText;
+            display.innerText = memory.num1.toString();
             console.log(memory.num1);
             console.log(memory);
         }
-        // need new metric for 
 
         //(operator !== undefined && !calculationComplete)
         if (operator !== undefined && !calculationComplete) {
             if (memory.num2 == undefined) {
                 console.log("num2 first function")
                 memory.num2 = e.target.innerText;
+                display.innerText = memory.num2.toString();
                 console.log(memory);
             }
             else if (memory.num2!== undefined) {
                 console.log("num2 second function")
                 memory.num2 += e.target.innerText;
+                display.innerText = memory.num2.toString();
                 console.log(memory);
             }
         }    
@@ -129,12 +133,17 @@ equalsSelection.addEventListener('click', function (){
         console.log("there is a running sum. add num 1 and 2")
         console.log(memory);
         memory.sum = operate(memory.num1, memory.num2, operator);
+        display.innerText = memory.runningSum.toString();
         console.log(memory);
         memory.sum = undefined;
         memory.num2 = undefined;
         
     }
 });
+
+
+
+
 
 function clearCalculator (){
     console.log('go');
@@ -143,6 +152,7 @@ function clearCalculator (){
     memory.sum = undefined;
     memory.runningSum = undefined;
     operator = undefined;
+    
     console.log(memory);
 };
 
