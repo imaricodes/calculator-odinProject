@@ -1,8 +1,9 @@
 //operator functions
 const addCalc = (num1, num2) => {
-    //clearOperator();
-   
-    return num1 + num2;}
+    let result = num1 + num2;
+    let resultRounded = roundToTwo(result);
+    console.log(resultRounded);
+    return resultRounded;}
 
 const multiplyCalc = (num1, num2) => num1 * num2;
 
@@ -23,115 +24,79 @@ console.log(clearBtn);
 
 let calculationComplete = false;
 
-let clearOperator = function () {
-    operator = undefined;
+clearBtn.addEventListener('click', clearCalculator);
 
+function roundToTwo(num) {
+    return +(Math.round(num + "e+2")  + "e-2");
 }
 
-
 //user input
-numberSelection.forEach((button) => {
+operatorSelection.forEach((button) => {
     button.addEventListener('click', (e)=> {
-        console.log("operator :" + operator)
-        //store value in num1 if conditions met
-        if (memory.num1 == undefined && operator == undefined) {  
-            console.log("num1 first function");
-            memory.num1 = e.target.innerText;
-            console.log(memory);
-            console.log("memory.num1: " + memory.num1);
+        //need to do first calculation, then set operator
+        if (operator !== undefined && memory.num2 !== undefined) {
+            operate(memory.num1, memory.num2, operator);
         }
-        //has operator button been pushed? If not, keep appending numbers to store in num 1
-        else if (operator == undefined){
-            memory.num1 += e.target.innerText;
-            console.log("num1 second function");
-            console.log(memory);
-            console.log(memory.num1);
+        operator = e.target.id;
+        console.log("new operator: " + operator);
+        if (memory.num2 == undefined) {
+            console.log('need two sums');
+        } 
+        else if (memory.num1 !== undefined && memory.num2 !== undefined) {
+            operate(memory.num1, memory.num2, operator);
         }
-
-        //select operater
-        operatorSelection.forEach((button) => {
-            button.addEventListener('click', (e)=> {
-                //should operator be set here or in an else block below?
-                operator = e.target.id;
-                    console.log(`operator = ${operator}`);
-                    console.log(memory);
-                //first time pressing operation button, sum is undefined, so this block will not execute. If there is a sum, this will execute.
-                if (memory.sum !== undefined) {
-                    memory.num1 = memory.sum;
-                    memory.runningSum = memory.sum;
-                    
-                    memory.num2 = undefined;
-                    //memory.sum = undefined;
-                    console.log(memory);
-                }
-                
-                //this starts the calculation of num1 and num2 after each has been entered.. this will run only if there is a value in num2
-                if (memory.num2 !==undefined) {
-                    console.log('it worked');
-                    operate(memory.num1, memory.num2, operator)
-                    memory.runningSum = memory.sum;
-                    console.log(memory);
-                }
-                
-                //call operator function based on id
-                
-                    // operator = e.target.id;
-                    // console.log(`operator = ${operator}`);
-                    // console.log(memory);
-                
-               
-            })
-        });
-        
-        //if the operator has been pushed start storing number 2
-        if (operator && !calculationComplete) {
-            if (memory.num2 == undefined) {
-                console.log("num2 first function")
-                memory.num2 = e.target.innerText;
-                console.log(memory);
-            }
-
-
-            else if (memory.num2!== undefined) {
-                console.log("num2 second function")
-                memory.num2 += e.target.innerText;
-                console.log(memory);
-            }
-           
-           
-        }    
+        if (memory.num2 !==undefined) {
+            console.log(memory);
+        }   
     })
 });
 
 
 
+numberSelection.forEach((button) => {
+    button.addEventListener('click', (e)=> {
+        console.log("operator :" + operator)
+        if (memory.num1 == undefined && operator == undefined) {  
+
+            memory.num1 = e.target.innerText;
+            console.log("memory.num1: " + memory.num1);
+            console.log(memory);
+        }
+        else if (operator == undefined){
+            memory.num1 += e.target.innerText;
+            console.log(memory.num1);
+            console.log(memory);
+        }
+
+        if (operator !== undefined && !calculationComplete) {
+            if (memory.num2 == undefined) {
+                console.log("num2 first function")
+                memory.num2 = e.target.innerText;
+                console.log(memory);
+            }
+            else if (memory.num2!== undefined) {
+                console.log("num2 second function")
+                memory.num2 += e.target.innerText;
+                console.log(memory);
+            }
+        }    
+    })
+});
+
 
 let operate = function operation (num1, num2, operator){
 
     if (operator == "add") {
-        //check for running total. If present, run addcalc with only single argument
-        memory.sum = addCalc(parseInt(memory.num1), parseInt(memory.num2));
-        //memory.num1 = memory.sum;
+        memory.runningSum = addCalc(parseInt(memory.num1), parseInt(memory.num2, operator));
+        memory.num1 = memory.runningSum;
         memory.num2 = undefined;
-        //don't move sum to running sum or clear 'sum'
-        //console.log("move running sum to sum");
-        
-        //memory.sum = undefined;
-        
         console.log(memory);
-       
-        // return memory.sum; 
     }
     else if (operator === "multiply") {
-        console.log("multiply function");
-        memory.sum = multiplyCalc(memory.num1, memory.num2);
-        memory.num1 = undefined;
+        memory.runningSum = multiplyCalc(parseInt(memory.num1), parseInt(memory.num2, operator));
+        memory.num1 = memory.runningSum;
         memory.num2 = undefined;
-        //don't move sum to running sum or clear 'sum'
-        //memory.runningSum = memory.sum;
-        //memory.sum = undefined;
         console.log(memory);
-        // return memory.sum; 
     }
 }
 
@@ -152,7 +117,6 @@ equalsSelection.addEventListener('click', function (){
         memory.num2 = undefined;
         console.log(memory);
         
-       
     }
     else if (memory.runningSum !==undefined) {
         console.log("there is a running sum. add num 1 and 2")
@@ -161,17 +125,9 @@ equalsSelection.addEventListener('click', function (){
         console.log(memory);
         memory.sum = undefined;
         memory.num2 = undefined;
-        //operator = undefined;
-        //console.log(memory);
-        
-    }
-    else {
-        //combine memory.num2 and running sum. but operate won't work with undefined num1 ! separate running sum function?
         
     }
 });
-
-
 
 function clearCalculator (){
     console.log('go');
@@ -180,10 +136,8 @@ function clearCalculator (){
     memory.sum = undefined;
     memory.runningSum = undefined;
     operator = undefined;
-    calculationComplete = true;
+    console.log(memory);
 };
 
-clearBtn.addEventListener('click', clearCalculator);
 
 
-//console.log(numberSelection);
